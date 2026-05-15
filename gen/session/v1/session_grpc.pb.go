@@ -19,10 +19,11 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	SessionService_StartSession_FullMethodName   = "/session.v1.SessionService/StartSession"
-	SessionService_EndSession_FullMethodName     = "/session.v1.SessionService/EndSession"
-	SessionService_GetSession_FullMethodName     = "/session.v1.SessionService/GetSession"
-	SessionService_CalculatePrice_FullMethodName = "/session.v1.SessionService/CalculatePrice"
+	SessionService_StartSession_FullMethodName      = "/session.v1.SessionService/StartSession"
+	SessionService_EndSession_FullMethodName        = "/session.v1.SessionService/EndSession"
+	SessionService_GetSession_FullMethodName        = "/session.v1.SessionService/GetSession"
+	SessionService_CalculatePrice_FullMethodName    = "/session.v1.SessionService/CalculatePrice"
+	SessionService_GetActiveSessions_FullMethodName = "/session.v1.SessionService/GetActiveSessions"
 )
 
 // SessionServiceClient is the client API for SessionService service.
@@ -39,6 +40,7 @@ type SessionServiceClient interface {
 	GetSession(ctx context.Context, in *SessionRequest, opts ...grpc.CallOption) (*SessionResponse, error)
 	// CalculatePrice returns the current accrued price for an active session.
 	CalculatePrice(ctx context.Context, in *SessionRequest, opts ...grpc.CallOption) (*PriceResponse, error)
+	GetActiveSessions(ctx context.Context, in *UserRequest, opts ...grpc.CallOption) (*SessionList, error)
 }
 
 type sessionServiceClient struct {
@@ -89,6 +91,16 @@ func (c *sessionServiceClient) CalculatePrice(ctx context.Context, in *SessionRe
 	return out, nil
 }
 
+func (c *sessionServiceClient) GetActiveSessions(ctx context.Context, in *UserRequest, opts ...grpc.CallOption) (*SessionList, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SessionList)
+	err := c.cc.Invoke(ctx, SessionService_GetActiveSessions_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // SessionServiceServer is the server API for SessionService service.
 // All implementations must embed UnimplementedSessionServiceServer
 // for forward compatibility.
@@ -103,6 +115,7 @@ type SessionServiceServer interface {
 	GetSession(context.Context, *SessionRequest) (*SessionResponse, error)
 	// CalculatePrice returns the current accrued price for an active session.
 	CalculatePrice(context.Context, *SessionRequest) (*PriceResponse, error)
+	GetActiveSessions(context.Context, *UserRequest) (*SessionList, error)
 	mustEmbedUnimplementedSessionServiceServer()
 }
 
@@ -124,6 +137,9 @@ func (UnimplementedSessionServiceServer) GetSession(context.Context, *SessionReq
 }
 func (UnimplementedSessionServiceServer) CalculatePrice(context.Context, *SessionRequest) (*PriceResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method CalculatePrice not implemented")
+}
+func (UnimplementedSessionServiceServer) GetActiveSessions(context.Context, *UserRequest) (*SessionList, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetActiveSessions not implemented")
 }
 func (UnimplementedSessionServiceServer) mustEmbedUnimplementedSessionServiceServer() {}
 func (UnimplementedSessionServiceServer) testEmbeddedByValue()                        {}
@@ -218,6 +234,24 @@ func _SessionService_CalculatePrice_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _SessionService_GetActiveSessions_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UserRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SessionServiceServer).GetActiveSessions(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SessionService_GetActiveSessions_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SessionServiceServer).GetActiveSessions(ctx, req.(*UserRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // SessionService_ServiceDesc is the grpc.ServiceDesc for SessionService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -240,6 +274,10 @@ var SessionService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CalculatePrice",
 			Handler:    _SessionService_CalculatePrice_Handler,
+		},
+		{
+			MethodName: "GetActiveSessions",
+			Handler:    _SessionService_GetActiveSessions_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

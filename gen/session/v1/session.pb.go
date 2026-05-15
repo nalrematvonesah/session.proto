@@ -306,6 +306,94 @@ func (x *PriceResponse) GetElapsedSeconds() int64 {
 	return 0
 }
 
+type UserRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	UserId        int64                  `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UserRequest) Reset() {
+	*x = UserRequest{}
+	mi := &file_session_v1_session_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UserRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UserRequest) ProtoMessage() {}
+
+func (x *UserRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_session_v1_session_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UserRequest.ProtoReflect.Descriptor instead.
+func (*UserRequest) Descriptor() ([]byte, []int) {
+	return file_session_v1_session_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *UserRequest) GetUserId() int64 {
+	if x != nil {
+		return x.UserId
+	}
+	return 0
+}
+
+type SessionList struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Sessions      []*SessionResponse     `protobuf:"bytes,1,rep,name=sessions,proto3" json:"sessions,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SessionList) Reset() {
+	*x = SessionList{}
+	mi := &file_session_v1_session_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SessionList) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SessionList) ProtoMessage() {}
+
+func (x *SessionList) ProtoReflect() protoreflect.Message {
+	mi := &file_session_v1_session_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SessionList.ProtoReflect.Descriptor instead.
+func (*SessionList) Descriptor() ([]byte, []int) {
+	return file_session_v1_session_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *SessionList) GetSessions() []*SessionResponse {
+	if x != nil {
+		return x.Sessions
+	}
+	return nil
+}
+
 var File_session_v1_session_proto protoreflect.FileDescriptor
 
 const file_session_v1_session_proto_rawDesc = "" +
@@ -336,14 +424,19 @@ const file_session_v1_session_proto_rawDesc = "" +
 	"\x06amount\x18\x06 \x01(\x01R\x06amount\"P\n" +
 	"\rPriceResponse\x12\x16\n" +
 	"\x06amount\x18\x01 \x01(\x01R\x06amount\x12'\n" +
-	"\x0felapsed_seconds\x18\x02 \x01(\x03R\x0eelapsedSeconds2\xaa\x02\n" +
+	"\x0felapsed_seconds\x18\x02 \x01(\x03R\x0eelapsedSeconds\"&\n" +
+	"\vUserRequest\x12\x17\n" +
+	"\auser_id\x18\x01 \x01(\x03R\x06userId\"F\n" +
+	"\vSessionList\x127\n" +
+	"\bsessions\x18\x01 \x03(\v2\x1b.session.v1.SessionResponseR\bsessions2\xf1\x02\n" +
 	"\x0eSessionService\x12E\n" +
 	"\fStartSession\x12\x18.session.v1.StartRequest\x1a\x1b.session.v1.SessionResponse\x12A\n" +
 	"\n" +
 	"EndSession\x12\x16.session.v1.EndRequest\x1a\x1b.session.v1.SessionResponse\x12E\n" +
 	"\n" +
 	"GetSession\x12\x1a.session.v1.SessionRequest\x1a\x1b.session.v1.SessionResponse\x12G\n" +
-	"\x0eCalculatePrice\x12\x1a.session.v1.SessionRequest\x1a\x19.session.v1.PriceResponseBCZAgithub.com/nalrematvonesah/session.proto/gen/session/v1;sessionv1b\x06proto3"
+	"\x0eCalculatePrice\x12\x1a.session.v1.SessionRequest\x1a\x19.session.v1.PriceResponse\x12E\n" +
+	"\x11GetActiveSessions\x12\x17.session.v1.UserRequest\x1a\x17.session.v1.SessionListBCZAgithub.com/nalrematvonesah/session.proto/gen/session/v1;sessionv1b\x06proto3"
 
 var (
 	file_session_v1_session_proto_rawDescOnce sync.Once
@@ -357,28 +450,33 @@ func file_session_v1_session_proto_rawDescGZIP() []byte {
 	return file_session_v1_session_proto_rawDescData
 }
 
-var file_session_v1_session_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
+var file_session_v1_session_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
 var file_session_v1_session_proto_goTypes = []any{
 	(*StartRequest)(nil),    // 0: session.v1.StartRequest
 	(*EndRequest)(nil),      // 1: session.v1.EndRequest
 	(*SessionRequest)(nil),  // 2: session.v1.SessionRequest
 	(*SessionResponse)(nil), // 3: session.v1.SessionResponse
 	(*PriceResponse)(nil),   // 4: session.v1.PriceResponse
+	(*UserRequest)(nil),     // 5: session.v1.UserRequest
+	(*SessionList)(nil),     // 6: session.v1.SessionList
 }
 var file_session_v1_session_proto_depIdxs = []int32{
-	0, // 0: session.v1.SessionService.StartSession:input_type -> session.v1.StartRequest
-	1, // 1: session.v1.SessionService.EndSession:input_type -> session.v1.EndRequest
-	2, // 2: session.v1.SessionService.GetSession:input_type -> session.v1.SessionRequest
-	2, // 3: session.v1.SessionService.CalculatePrice:input_type -> session.v1.SessionRequest
-	3, // 4: session.v1.SessionService.StartSession:output_type -> session.v1.SessionResponse
-	3, // 5: session.v1.SessionService.EndSession:output_type -> session.v1.SessionResponse
-	3, // 6: session.v1.SessionService.GetSession:output_type -> session.v1.SessionResponse
-	4, // 7: session.v1.SessionService.CalculatePrice:output_type -> session.v1.PriceResponse
-	4, // [4:8] is the sub-list for method output_type
-	0, // [0:4] is the sub-list for method input_type
-	0, // [0:0] is the sub-list for extension type_name
-	0, // [0:0] is the sub-list for extension extendee
-	0, // [0:0] is the sub-list for field type_name
+	3, // 0: session.v1.SessionList.sessions:type_name -> session.v1.SessionResponse
+	0, // 1: session.v1.SessionService.StartSession:input_type -> session.v1.StartRequest
+	1, // 2: session.v1.SessionService.EndSession:input_type -> session.v1.EndRequest
+	2, // 3: session.v1.SessionService.GetSession:input_type -> session.v1.SessionRequest
+	2, // 4: session.v1.SessionService.CalculatePrice:input_type -> session.v1.SessionRequest
+	5, // 5: session.v1.SessionService.GetActiveSessions:input_type -> session.v1.UserRequest
+	3, // 6: session.v1.SessionService.StartSession:output_type -> session.v1.SessionResponse
+	3, // 7: session.v1.SessionService.EndSession:output_type -> session.v1.SessionResponse
+	3, // 8: session.v1.SessionService.GetSession:output_type -> session.v1.SessionResponse
+	4, // 9: session.v1.SessionService.CalculatePrice:output_type -> session.v1.PriceResponse
+	6, // 10: session.v1.SessionService.GetActiveSessions:output_type -> session.v1.SessionList
+	6, // [6:11] is the sub-list for method output_type
+	1, // [1:6] is the sub-list for method input_type
+	1, // [1:1] is the sub-list for extension type_name
+	1, // [1:1] is the sub-list for extension extendee
+	0, // [0:1] is the sub-list for field type_name
 }
 
 func init() { file_session_v1_session_proto_init() }
@@ -392,7 +490,7 @@ func file_session_v1_session_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_session_v1_session_proto_rawDesc), len(file_session_v1_session_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   5,
+			NumMessages:   7,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
