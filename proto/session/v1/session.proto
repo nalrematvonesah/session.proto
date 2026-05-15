@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+package session.v1;
+
+option go_package = "github.com/nalrematvonesah/session.proto/gen/session/v1;sessionv1";
+
+// SessionService manages parking sessions and their billing.
+service SessionService {
+  // StartSession assigns a free slot to a vehicle and starts billing.
+  rpc StartSession(StartRequest) returns (SessionResponse);
+  // EndSession stops billing, releases the slot and registers a payment.
+  rpc EndSession(EndRequest) returns (SessionResponse);
+  // GetSession returns current session information.
+  rpc GetSession(SessionRequest) returns (SessionResponse);
+  // CalculatePrice returns the current accrued price for an active session.
+  rpc CalculatePrice(SessionRequest) returns (PriceResponse);
+}
+
+message StartRequest {
+  int64 user_id = 1;
+  int64 vehicle_id = 2;
+  // Optional idempotency key.
+  string request_id = 3;
+}
+
+message EndRequest {
+  int64 session_id = 1;
+}
+
+message SessionRequest {
+  int64 session_id = 1;
+}
+
+message SessionResponse {
+  int64 session_id = 1;
+  int64 slot_id = 2;
+  int64 vehicle_id = 3;
+  int64 start_time_unix = 4;
+  int64 end_time_unix = 5; // 0 if still active
+  double amount = 6;
+}
+
+message PriceResponse {
+  double amount = 1;
+  int64 elapsed_seconds = 2;
+}
